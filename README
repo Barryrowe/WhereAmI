@@ -1,0 +1,8 @@
+This repo will contain a simple Android Application that should do the following:
+
+1.  Always show the last known GeoLocation Data for the Phone
+2.  Listen for changes in GeoLocation
+3.  Allow the user to turn on GPS services from within the app
+4.  Allow the user to turn off the GPS services from within the app
+5.  Store a list of last X known locations.
+6.  Allow user to enter a # of locations to store.  
