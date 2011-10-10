@@ -1,6 +1,7 @@
 package pineapple.piranha.android;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,12 +9,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class WhereAmIActivity extends Activity {
-	
+	private static Logger _log = Logger.getLogger(WhereAmIActivity.class.getName());
 	private static final long _MINUTE_IN_MILLISECONDS = 60000;
 	
+	private LocationListener locationListener;
+	private LocationManager locationManager;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,10 +27,13 @@ public class WhereAmIActivity extends Activity {
                          
         
         // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        	
+        printLocation(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
+        printLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+        
         // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
+        locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
               // Called when a new location is found by the network location provider.
               printLocation(location);              
@@ -33,21 +41,40 @@ public class WhereAmIActivity extends Activity {
 
             public void onStatusChanged(String provider, int status, Bundle extras) {            	            	
             }
-
             public void onProviderEnabled(String provider) {}
 
             public void onProviderDisabled(String provider) {}
           };
-          
-        printLocation(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
         
         // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, _MINUTE_IN_MILLISECONDS, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, _MINUTE_IN_MILLISECONDS, 0, locationListener);
+          startListening(this.findViewById(R.id.startButton));
+          // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, _MINUTE_IN_MILLISECONDS, 0, locationListener);
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, _MINUTE_IN_MILLISECONDS, 0, locationListener);
     }
     
+    public void stopListening(View view){
+    	_log.info("Stop Listening Invoked!");    		    		
+    	locationManager.removeUpdates(locationListener); 
+    	
+    	Button stopButton = (Button)view;
+    	stopButton.setEnabled(false);
+		Button startButton = (Button)this.findViewById(R.id.startButton);
+		startButton.setEnabled(true);
+    }
+    
+    public void startListening(View view){
+    	_log.info("Staring Provider Listening Again!");
+    	// Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, _MINUTE_IN_MILLISECONDS, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, _MINUTE_IN_MILLISECONDS, 0, locationListener);
+        
+        Button startButton = (Button)view;
+    	startButton.setEnabled(false);
+		Button stopButton = (Button)this.findViewById(R.id.stopButton);
+		stopButton.setEnabled(true);
+    }
     public void printLocation(Location location){
-    	System.out.println("Prining Location");
+    	_log.info("Prining Location");
     	//Do something with location
     	TextView locationData = (TextView)this.findViewById(R.id.locationsData);
     	
