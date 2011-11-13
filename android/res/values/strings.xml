@@ -4,4 +4,14 @@
     <string name="location_color">#FF3300</string>
     <string name="stop_listening">Stop Tracking</string>
     <string name="start_listening">Start Tracking</string>
+    <string name="menu_preferences">Preferences</string>
+    <string name="menu_details">Details</string>
+    
+    <string name="pref_title_num_locations_to_store">How Many Locations To Store?</string>    
+    <string name="summary_num_locations_to_store">This preference will determine the maximum number of last known locations to store.</string>
+    <string name="dialog_title_num_locations_to_store">How Many Locations Do You Wish To Store?</string>
+    
+    <string name="pref_title_interval_in_minutes">Interval In Minutes</string>
+    <string name="summary_interval_in_minutes">This will determine the number of minutes between each Location update call.</string>
+    <string name="dialog_title_interval_in_minutes">Update Location Ever How Many Minutes?</string>
 </resources>
